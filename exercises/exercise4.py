@@ -1,6 +1,5 @@
 # from colorama import Fore
 import os
-import time
 
 movieList = []
 menu = {
