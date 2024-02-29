@@ -1,4 +1,4 @@
-# from colorama import Fore
+# How to use Methods
 import os
 
 movieList = []
