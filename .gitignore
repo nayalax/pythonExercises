@@ -5,6 +5,7 @@ __pycache__/
 
 # C extensions
 *.so
+*.csv
 
 # Distribution / packaging
 .Python
@@ -128,6 +129,7 @@ ENV/
 env.bak/
 venv.bak/
 dogs_vs_cats/
+
 
 # Spyder project settings
 .spyderproject

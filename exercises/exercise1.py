@@ -5,7 +5,7 @@ list_all = []
 test_list = []
 
 for index, line in enumerate(large_text):
-    test_list. append(line)
+    test_list.append(line)
     if ((index + 1) % 25 == 0):
     # List1 = test_list.copy()
         list_all.append(test_list)
