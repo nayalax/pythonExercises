@@ -1,4 +1,5 @@
 import pandas as pd
+import zipfile
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
@@ -7,6 +8,11 @@ class Utils():
     def __init__(self):
         pass
         
+def extract_zip_file(filePath, extractPath):
+    with zipfile.ZipFile(filePath, 'r') as zip_ref:
+        zip_ref.extractall(extractPath)
+    return extractPath
+
 def get_avg_rating (df: pd.DataFrame):
     avg = pd.DataFrame(df.groupby('directors', as_index=False)['tomatometer_rating'].mean())
     return avg

@@ -21,8 +21,7 @@ ASTRA_DB_API_ENDPOINT = os.getenv("ASTRA_DB_API_ENDPOINT")
 
 # %%
 load_dotenv()
-
-dataSource = "../data/rotten_tomatoes_movies.csv"
+dataSource = tools.extract_zip_file('../data/rotten_tomatoes_movies.zip', '../data')
 df = pd.read_csv(dataSource)
 
 # Clean up the data for processing
@@ -48,26 +47,29 @@ cosineSim = cosine_similarity(tfidf_matrix, tfidf_matrix)
 openai = OpenAI(api_key=openaiApiKey)
 st.title("Rotten Tomatoes Movie Recommendations")
 
-userInput = st.text_input("Enter a movie you recently watched and enjoyed:")
-num_recommendations = st.slider("Number of recommendations:", min_value=1, max_value=15, value=5)
+def main():
 
-if userInput:
-    st.write("You might also enjoy these movies:")
-    recommendations = tools.get_recommendations(df, cosineSim, userInput)[:num_recommendations]
-    
-    movie_data = []    
-    st.write("Here are the rotton tomatoes scores and descriptions for each movie.")
-    for movie in recommendations:
-        prompt = f"Write a description for the movie {movie} and it's rotten tomatoes score"
-        response = openai.ChatCompletion.create (
-            model=engine,
-            messages= [
-                {"role": "system", "content": "You are a movie critic."},
-                {"role": "user", "content": prompt}
-            ]
-        )
-        movie_data.append([movie, response['choices'][0]['message']['content']])
+    userInput = st.text_input("Enter a movie you recently watched and enjoyed:")
+    num_recommendations = st.slider("Number of recommendations:", min_value=1, max_value=15, value=5)
+
+    if userInput:
+        st.write("You might also enjoy these movies:")
+        recommendations = tools.get_recommendations(df, cosineSim, userInput)[:num_recommendations]
         
-    st.table(pd.DataFrame(movie_data, columns=["Movie", "Description & Score"]))
-
-
+        movie_data = []    
+        st.write("Here are the rotton tomatoes scores and descriptions for each movie.")
+        for movie in recommendations:
+            prompt = f"Write a description for the movie {movie} and it's rotten tomatoes score"
+            response = openai.ChatCompletion.create (
+                model=engine,
+                messages= [
+                    {"role": "system", "content": "You are a movie critic."},
+                    {"role": "user", "content": prompt}
+                ]
+            )
+            movie_data.append([movie, response['choices'][0]['message']['content']])
+            
+        st.table(pd.DataFrame(movie_data, columns=["Movie", "Description & Score"]))
+        
+if __name__ == "__main__":
+    main()
